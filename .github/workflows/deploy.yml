@@ -28,21 +28,20 @@ jobs:
 
     - name: Create deployment package
       run: |
-        mkdir -p deployment
-        cp -r .next deployment/
-        cp -r public deployment/
-        cp -r app deployment/
-        cp -r components deployment/
-        cp -r lib deployment/
-        cp -r hooks deployment/
-        cp -r styles deployment/
-        cp package*.json deployment/
-        cp next.config.mjs deployment/
-        cp tsconfig.json deployment/
-        cp postcss.config.mjs deployment/
-        cp components.json deployment/
-        cp -r .next/static deployment/.next/
-        tar -czf deployment.tar.gz -C deployment .
+        mkdir -p deploy
+        cp -r .next deploy/
+        cp -r public deploy/
+        cp -r app deploy/
+        cp -r components deploy/
+        cp -r hooks deploy/
+        cp -r lib deploy/
+        cp -r styles deploy/
+        cp package*.json deploy/
+        cp next.config.mjs deploy/
+        cp tsconfig.json deploy/
+        cp components.json deploy/
+        cp postcss.config.mjs deploy/
+        tar -czf deploy.tar.gz -C deploy .
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.3
@@ -53,50 +52,34 @@ jobs:
         port: ${{ secrets.EC2_PORT || 22 }}
         script: |
           # Create app directory if it doesn't exist
-          sudo mkdir -p /var/www/cloudlem-landing
-          cd /var/www/cloudlem-landing
+          mkdir -p /home/${{ secrets.EC2_USERNAME }}/cloudlem-app
+          cd /home/${{ secrets.EC2_USERNAME }}/cloudlem-app
           
-          # Stop existing services
-          sudo systemctl stop cloudlem-landing || true
-          sudo docker-compose down || true
+          # Stop existing application
+          pm2 stop cloudlem-app 2>/dev/null || true
+          pm2 delete cloudlem-app 2>/dev/null || true
           
-          # Clean up old deployment
-          sudo rm -rf .next public app components lib hooks styles package*.json next.config.mjs tsconfig.json postcss.config.mjs components.json
+          # Remove old files
+          rm -rf .next public app components hooks lib styles
+          rm -f package*.json next.config.mjs tsconfig.json components.json postcss.config.mjs
+          
+          # Extract new deployment
+          tar -xzf /tmp/deploy.tar.gz
+          
+          # Install production dependencies
+          npm ci --only=production
+          
+          # Start application with PM2
+          pm2 start npm --name "cloudlem-app" -- start
+          pm2 save
+          pm2 startup
 
-    - name: Copy files to EC2
+    - name: Upload deployment package
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         port: ${{ secrets.EC2_PORT || 22 }}
-        source: "deployment.tar.gz"
-        target: "/var/www/cloudlem-landing/"
-
-    - name: Extract and setup on EC2
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        port: ${{ secrets.EC2_PORT || 22 }}
-        script: |
-          cd /var/www/cloudlem-landing
-          
-          # Extract deployment package
-          tar -xzf deployment.tar.gz
-          rm deployment.tar.gz
-          
-          # Install dependencies
-          npm ci --production
-          
-          # Set proper permissions
-          sudo chown -R $USER:$USER /var/www/cloudlem-landing
-          sudo chmod -R 755 /var/www/cloudlem-landing
-          
-          # Start the application
-          sudo systemctl start cloudlem-landing
-          sudo systemctl enable cloudlem-landing
-          
-          # Also start with docker-compose if available
-          sudo docker-compose up -d || true
+        source: "deploy.tar.gz"
+        target: "/tmp/"
