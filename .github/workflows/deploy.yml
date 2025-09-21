@@ -102,9 +102,11 @@ jobs:
           tar -xzf /tmp/deploy.tar.gz
           
           # Install production dependencies
-          npm ci --only=production
+          npm ci --omit=dev
           
           # Start application with PM2
           pm2 start npm --name "cloudlem-app" -- start
           pm2 save
-          pm2 startup
+          
+          # Setup PM2 startup (run the suggested command)
+          sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ${{ secrets.EC2_USERNAME }} --hp /home/${{ secrets.EC2_USERNAME }}
