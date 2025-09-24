@@ -63,32 +63,32 @@ export default function ServicesSection() {
   const currentService = services.find((service) => service.id === activeService)
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section className="py-12 sm:py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Service Tabs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-12">
           {services.map((service) => (
             <button
               key={service.id}
               onClick={() => setActiveService(service.id)}
-              className={`p-6 rounded-lg border-2 text-left transition-all duration-300 ${
+              className={`p-4 sm:p-6 rounded-lg border-2 text-left transition-all duration-300 ${
                 activeService === service.id
                   ? "border-orange-500 bg-orange-50"
                   : "border-gray-200 bg-white hover:border-gray-300"
               }`}
             >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">{service.icon}</span>
-                <h3 className="font-semibold text-gray-800 text-sm leading-tight">{service.title}</h3>
+              <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <span className="text-xl sm:text-2xl">{service.icon}</span>
+                <h3 className="font-semibold text-gray-800 text-xs sm:text-sm leading-tight">{service.title}</h3>
               </div>
             </button>
           ))}
         </div>
 
         {/* Service Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-800">{currentService?.content.heading}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">{currentService?.content.heading}</h2>
 
             <div className="space-y-4">
               {currentService?.content.description.map((paragraph, index) => (
@@ -109,7 +109,7 @@ export default function ServicesSection() {
               <img
                 src="/professional-woman-in-green-top-pointing-at-comput.jpg"
                 alt="Professional presenting analytics dashboard"
-                className="w-full max-w-md h-auto"
+                className="w-full max-w-sm sm:max-w-md h-auto"
               />
             </div>
           </div>

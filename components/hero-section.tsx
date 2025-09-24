@@ -10,11 +10,11 @@ export default function HeroSection() {
       <TechIcons />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-6 depth-2 animate-slide-up">
             <div className="space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold text-foreground hover-lift">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground hover-lift">
                 Welcome To{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-accent neon-glow">
                   CLOUDLEM
@@ -30,8 +30,8 @@ export default function HeroSection() {
                 </p>
               </div>
 
-              <div className="pt-6">
-                <button className="btn-3d bg-accent text-accent-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300">
+              <div className="pt-4 sm:pt-6">
+                <button className="btn-3d bg-accent text-accent-foreground px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-2xl transition-all duration-300">
                   Get Started Today
                   <svg className="inline-block ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -42,7 +42,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Illustration */}
-          <div className="relative depth-3">
+          <div className="relative depth-3 mt-8 lg:mt-0">
             <div className="relative z-10 flex justify-center">
               {/* Main illustration container */}
               <div className="relative animate-float">
@@ -51,7 +51,7 @@ export default function HeroSection() {
                   <img
                     src="/person-working-on-laptop-with-orange-shirt-and-blu.jpg"
                     alt="Person working on laptop"
-                    className="w-full max-w-md img-3d rounded-2xl shadow-2xl"
+                    className="w-full max-w-sm sm:max-w-md img-3d rounded-2xl shadow-2xl"
                   />
                 </div>
 

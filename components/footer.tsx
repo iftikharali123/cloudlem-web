@@ -119,18 +119,18 @@ export default function Footer() {
               Join Our Community
               <span className="text-orange-500 ml-1">🔥</span>
             </h3>
-            <form onSubmit={handleNewsletterSubmit} className="flex">
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-l-full focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-full sm:rounded-l-full focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 required
               />
               <button
                 type="submit"
-                className="bg-orange-500 text-white px-4 py-2 rounded-r-full hover:bg-orange-600 transition-colors flex items-center justify-center"
+                className="bg-orange-500 text-white px-4 py-2 rounded-full sm:rounded-r-full hover:bg-orange-600 transition-colors flex items-center justify-center"
               >
                 <ArrowRight className="w-5 h-5" />
               </button>

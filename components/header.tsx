@@ -2,9 +2,11 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useState } from "react"
 
 export default function Header() {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -52,13 +54,39 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button className="text-foreground/80 hover:text-accent btn-3d p-2 rounded-lg">
+            <button
+              onClick={() => setIsOpen((v) => !v)}
+              aria-label="Toggle menu"
+              aria-expanded={isOpen}
+              className="text-foreground/80 hover:text-accent btn-3d p-2 rounded-lg"
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
+        {/* Mobile nav */}
+        {isOpen && (
+          <div className="md:hidden pb-4">
+            <nav className="grid gap-2 rounded-xl border border-white/20 bg-white/70 backdrop-blur p-3">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`px-3 py-2 rounded-lg transition-colors ${
+                    pathname === item.href
+                      ? "bg-accent text-accent-foreground"
+                      : "text-foreground/80 hover:bg-card"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   )
