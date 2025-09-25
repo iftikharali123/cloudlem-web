@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy to AWS S3
 
 on:
   push:
@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Next.js app
-        run: npm run build
+      - name: Build & Export Next.js app
+        run: |
+          npm run build
+          npx next export   # 👈 creates ./out folder for S3
+          ls -la ./out      # 👈 debug step to confirm folder exists
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
